@@ -1,0 +1,24 @@
+create database Twitter;
+
+use Twitter;
+
+
+create table Users(UserName varchar(50) unique, Name varchar(20), Password varchar(50), primary key(UserName, Name));
+
+
+create table UsersProfile(UserName varchar(50) unique, Name varchar(20), Icon Longblob, Bio varchar(500), FollowersCount int default 0, FollowingCount int default 0, Verified boolean, Foreign key(username, name) references Users(username, name) on delete cascade, primary key(username));
+
+
+create table Tweets(TweetId int auto_increment primary key, UserName varchar(50), Name varchar(20), Icon Longblob, Hashtag varchar(20), Description varchar(1000), Photo Longblob, TweetDate Timestamp, Likes int default 0, foreign key(username) references UsersProfile(userName) on delete cascade);
+
+
+create table TweetsLike(TweetId int not null, UserName varchar(50), Name varchar(20), Icon Longblob, foreign key(UserName) references UsersProfile(UserName) on delete cascade, foreign key(TweetId) references Tweets(TweetId) on delete cascade, PRIMARY KEY(TweetId, UserName));
+
+
+create table Comments(CommentId int auto_increment primary key, TweetId int, Hashtag varchar(20), UserName varchar(50), Name varchar(20), Icon LongBlob, Likes int default 0, foreign key(TweetId) references Tweets(TweetId) on delete cascade,foreign key(UserName) references UsersProfile(UserName) on delete cascade);
+
+
+create table CommentsLike(CommentId int not Null, UserName varchar(50), Name varchar(20), Icon Longblob, foreign key(CommentId) references Comments(CommentId) on delete cascade, Foreign key(UserName) references UsersProfile(UserName) on delete cascade, primary key(CommentId, UserName));
+
+
+create table Follows(FollowedBy varchar(50), Followed varchar(50), FollowedName varchar(20), Icon Longblob, foreign key(FollowedBy) references UsersProfile(UserName) on delete cascade, foreign key(Followed) references UsersProfile(UserName) on delete cascade, primary key(FollowedBy, Followed));
