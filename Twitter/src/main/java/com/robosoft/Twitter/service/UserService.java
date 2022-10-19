@@ -1,5 +1,7 @@
 package com.robosoft.Twitter.service;
 
+import com.robosoft.Twitter.entity.User;
+import com.robosoft.Twitter.entity.UserProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -10,12 +12,18 @@ public class UserService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    public String signup(String user, MultipartFile file) {
-        jdbcTemplate.update("insert into user(username,dp) values(?,?)",user,file.getOriginalFilename());
-        return "Sign up Completed Welcome to Twitter";
+
+    private String query;
+
+    public String signUp(User user) {
+        query = "insert into Users values(?,?,?)";
+        jdbcTemplate.update(query,user.getUsername(), user.getName(), user.getPassword());
+        return "Welcome to Twitter. Please login at and complete your profile at http://localhost:8080/profileCompletion.";
     }
 
-    public byte[] getuser(String username) {
-        return new byte[0];
+    public String completeProfile(UserProfile userProfile){
+        query = "insert into UsersProfile (UserName, Name, Icon, Bio) values (?,?,?,?)";
+        jdbcTemplate.update(query, userProfile.getUsername(), userProfile.getName(), userProfile.getIcon(), userProfile.getBio());
+        return "Profile completion successful.";
     }
 }
