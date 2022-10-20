@@ -13,11 +13,12 @@ public class Comment {
 
     private int CommentId;
     private int tweetId;
-    private String hashtag;
-    private String userName;
+    private String username;
     private String name;
+    private String hashtag;
+    private String comments;
     @Lob
-    private byte[] icon;
+    private byte[] photo;
     private int likes;
 
 }

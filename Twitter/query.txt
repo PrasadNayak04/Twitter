@@ -22,3 +22,60 @@ create table CommentsLike(CommentId int not Null, UserName varchar(50), Name var
 
 
 create table Follows(FollowedBy varchar(50), Followed varchar(50), FollowedName varchar(20), Icon Longblob, foreign key(FollowedBy) references UsersProfile(UserName) on delete cascade, foreign key(Followed) references UsersProfile(UserName) on delete cascade, primary key(FollowedBy, Followed));
+
+
+alter table usersprofile add foreign key(username, name) references users(username, name) on update cascade;
+
+alter table tweets add foreign key(username) references UsersProfile(userName) on update cascade;
+
+alter table tweetslike add foreign key(UserName) references UsersProfile(UserName) on update cascade;
+
+alter table tweetslike add foreign key(TweetId) references Tweets(TweetId) on update cascade;
+
+ alter table Comments add foreign key(TweetId) references Tweets(TweetId) on update cascade;
+
+ alter table Comments add foreign key(username) references usersprofile(username) on update cascade;
+
+ alter table commentsLike add foreign key(CommentId) references Comments(CommentId) on update cascade;
+
+ alter table commentsLike add Foreign key(UserName) references UsersProfile(UserName) on update cascade;
+
+ alter table follows add foreign key(FollowedBy) references UsersProfile(UserName) on update cascade;
+
+ alter table follows add foreign key(Followed) references UsersProfile(UserName) on update cascade;
+
+
+alter table tweets drop column name;
+
+alter table tweets drop column icon;
+
+alter table tweetslike drop column name;
+
+alter table tweetslike drop column icon;
+
+alter table comments drop column icon;
+
+ alter table comments drop column name;
+
+alter table commentsLike drop column icon;
+
+alter table commentsLike drop column name;
+
+alter table follows drop column followedname;
+
+alter table follows drop column icon;
+
+
+alter table comments add column photo longblob after username;
+
+alter table comments add column Description varchar(1000) after username;
+
+ alter table comments drop column Hashtag;
+
+alter table comments add column Hashtag varchar(20) after UserName;
+
+
+
+
+
+

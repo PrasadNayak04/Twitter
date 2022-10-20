@@ -12,7 +12,7 @@ import javax.persistence.Lob;
 public class TweetLike {
 
     private int tweetId;
-    private String userName;
+    private String username;
     private String name;
     @Lob
     private byte[] icon;

@@ -5,14 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.Lob;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserProfileModel {
+public class CommentModel {
 
-    private String username;
-    private MultipartFile icon;
-    private String name;
-    private String bio;
+    private int tweetId;
+    private String hashtag;
+    private String description;
+    private MultipartFile photo;
 
 }

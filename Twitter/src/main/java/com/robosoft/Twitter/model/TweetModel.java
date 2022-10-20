@@ -5,14 +5,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.Lob;
+import java.io.Serializable;
+import java.sql.Timestamp;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserProfileModel {
+public class TweetModel implements Serializable {
 
-    private String username;
-    private MultipartFile icon;
-    private String name;
-    private String bio;
+    private String hashtag;
+    private String description;
+    private MultipartFile photo;
 
 }

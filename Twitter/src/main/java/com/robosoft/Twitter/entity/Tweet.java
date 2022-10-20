@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Entity;
 import javax.persistence.Lob;
 import java.sql.Timestamp;
 
@@ -12,8 +13,8 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class Tweet {
 
-    private int tweetId;
-    private String userName;
+    private String username;
+    private String name;
     private byte[] icon;
     private String hashtag;
     private String description;
