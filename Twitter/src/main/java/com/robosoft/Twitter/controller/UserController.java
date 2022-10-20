@@ -4,8 +4,7 @@ import com.robosoft.Twitter.entity.User;
 import com.robosoft.Twitter.model.CommentModel;
 import com.robosoft.Twitter.model.TweetModel;
 import com.robosoft.Twitter.model.UserProfileModel;
-import com.robosoft.Twitter.service.UserProfileService;
-import com.robosoft.Twitter.service.UserService;
+import com.robosoft.Twitter.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -25,8 +24,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
     @PostMapping("/registration")
-    public String signUp(@RequestBody User user)
+    public String signUp(@ModelAttribute User user)
     {
         return userService.signUp(user);
     }

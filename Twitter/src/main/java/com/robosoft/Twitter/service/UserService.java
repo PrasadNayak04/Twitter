@@ -7,6 +7,9 @@ import com.robosoft.Twitter.model.UserProfileModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -31,8 +34,9 @@ public class UserService extends UserProfileService{
     }
 
     public String completeProfile(UserProfileModel userProfile) throws IOException {
-        query = "insert into UsersProfile (UserName, Name, Icon, Bio) values (?,?,?,?)";
-        jdbcTemplate.update(query, userProfile.getUsername(), userProfile.getName(), userProfile.getIcon().getBytes(), userProfile.getBio());
+        query = "insert into UsersProfile (UserName, Name, Bio) values (?,?,?)";
+        jdbcTemplate.update(query, userProfile.getUsername(), userProfile.getName(), userProfile.getBio());
+        updateProfileDetails(userProfile.getIcon());
         return "Profile completion successful.";
     }
 
@@ -59,10 +63,10 @@ public class UserService extends UserProfileService{
     }
 
     public String tweet(TweetModel tweet) throws IOException {
-        /*byte[] icon = getIcon(tweet.getUsername());
-        String name = getNameByUsername(tweet.getUsername());*/
-        query = "insert into Tweets (UserName, Hashtag, Description, photo, tweetDate) values (?,?,?,?,?,?,?)";
+        query = "insert into Tweets (UserName, Hashtag, Description, tweetDate) values (?,?,?,?)";
         jdbcTemplate.update(query, loggedInUsername, tweet.getHashtag(), tweet.getDescription(), tweet.getPhoto().getBytes(), Timestamp.from(Instant.now()));
+        int tweetId = jdbcTemplate.queryForObject("select max(TweetId) from Tweets", Integer.class);
+        updateTweetPhotoDetails(tweetId, tweet.getPhoto());
         return "Tweet successfully posted.";
     }
 
@@ -74,9 +78,11 @@ public class UserService extends UserProfileService{
 
     public String replyTweet(int tweetId, TweetModel tweet, int authorizationId) throws IOException {
         if(authorized(authorizationId)) {
-            query = "insert into Comments (TweetId, Username, HashTag, Description, Photo) values (?,?,?,?,?)";
-            jdbcTemplate.update(query, tweetId, loggedInUsername, tweet.getHashtag(), tweet.getDescription(), tweet.getPhoto().getBytes());
-            return "Comment posted successfully.";
+            query = "insert into ReplyTweets (TweetId, Username, HashTag, Description) values (?,?,?,?)";
+            jdbcTemplate.update(query, tweetId, loggedInUsername, tweet.getHashtag(), tweet.getDescription());
+            int replyTweetId = jdbcTemplate.queryForObject("select max(ReplyTweetId) from ReplyTweets", Integer.class);
+            updateReplyTweetPhotoDetails(replyTweetId, tweet.getPhoto());
+            return "Reply tweet posted successfully.";
         }
         return "Unauthorized user";
     }
@@ -94,13 +100,47 @@ public class UserService extends UserProfileService{
 
     public String likeRetweet(int retweetId, int authorizationId){
         if(authorized(authorizationId)) {
-            query = "insert into CommentsLike values (?,?)";
+            query = "insert into ReplyTweetLikes values (?,?)";
             jdbcTemplate.update(query, retweetId, loggedInUsername);
-            query = "update Comments set likes = likes + 1 where commentId = " + retweetId;
+            query = "update ReplyTweets set likes = likes + 1 where commentId = " + retweetId;
             jdbcTemplate.update(query);
             return "Like posted to the comment with id " + retweetId;
         }
         return "Unauthorized user";
+    }
+
+    public String updateProfileDetails(MultipartFile file) throws IOException {
+        String url = generateImageUrl(file);
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        query = "insert into ProfileIconDetails values (?,?,?,?,?)";
+        jdbcTemplate.update(query, loggedInUsername, url, file.getBytes(), fileName, file.getContentType());
+        return "Reply tweet photo details updated";
+    }
+    public String updateReplyTweetPhotoDetails(int replyTweetId, MultipartFile file) throws IOException {
+        String url = generateImageUrl(file);
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        query = "insert into ReplyTweetPhotoDetails values (?,?,?,?,?)";
+        jdbcTemplate.update(query, replyTweetId, file.getBytes(), url, fileName, file.getContentType());
+        return "Reply tweet photo details updated";
+    }
+
+    public String updateTweetPhotoDetails(int tweetId, MultipartFile file) throws IOException {
+        String url = generateImageUrl(file);
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        query = "insert into TweetPhotoDetails values (?,?,?,?,?)";
+        jdbcTemplate.update(query, tweetId, file.getBytes(), url, fileName, file.getContentType());
+        return "Tweet photo details updated";
+    }
+
+    public String generateImageUrl(MultipartFile file){
+        if(file.equals(null)){
+            return null;
+        }
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String url = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(fileName)
+                .toUriString();
+        return url;
     }
 
 }

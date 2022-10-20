@@ -11,8 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserProfileModel {
 
     private String username;
-    private MultipartFile icon;
     private String name;
+    private MultipartFile icon;
     private String bio;
 
 }

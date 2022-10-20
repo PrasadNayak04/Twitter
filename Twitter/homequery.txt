@@ -1,0 +1,32 @@
+create database TwitterDatabase;
+
+use TwitterDatabase;
+
+create table Users(UserName varchar(50) unique, Name varchar(20), Password varchar(50), primary key(UserName, Name));
+
+
+create table UsersProfile(UserName varchar(50) unique, Name varchar(20), Bio varchar(5000), FollowersCount int default 0, FollowingCount int default 0, Verified boolean, Foreign key(username, name) references Users(username, name) on update cascade, primary key(username));
+
+
+create table Tweets(TweetId int auto_increment primary key, UserName varchar(50), Hashtag varchar(50), Description varchar(5000), TweetDate Timestamp, Likes int default 0, foreign key(username) references UsersProfile(userName) on update cascade);
+
+
+create table TweetLikes(TweetId int not null, UserName varchar(50), foreign key(UserName) references UsersProfile(UserName) on update cascade, foreign key(TweetId) references Tweets(TweetId) on delete cascade, PRIMARY KEY(TweetId, UserName));
+
+
+create table ReplyTweets(ReplyTweetId int auto_increment primary key, TweetId int, UserName varchar(50), Hashtag varchar(50), Description varchar(5000), Likes int default 0, foreign key(TweetId) references Tweets(TweetId) on delete cascade, foreign key(UserName) references UsersProfile(UserName) on update cascade);
+
+
+create table ReplyTweetLike(ReplyTweetId int not Null, UserName varchar(50), foreign key(ReplyTweetId) references ReplyTweets(ReplyTweetId) on delete cascade, Foreign key(UserName) references UsersProfile(UserName) on update cascade, primary key(ReplyTweetId, UserName));
+
+
+create table Follows(FollowedBy varchar(50), Followed varchar(50), foreign key(FollowedBy) references UsersProfile(UserName) on update cascade, foreign key(Followed) references UsersProfile(UserName) on update cascade, primary key(FollowedBy, Followed));
+
+create table ProfileIconDetails(UserName varchar(50) unique, PhotoData longblob, PhotoUrl varchar(500), PhotoName varchar(50),PhotoType varchar(20), foreign key(UserName) references UsersProfile(UserName) on update cascade);
+
+create table TweetPhotoDetails(TweetId int unique, PhotoData longblob, PhotoUrl varchar(500),  PhotoName varchar(50), PhotoType varchar(20), foreign key(TweetId) references Tweets(TweetId) on delete cascade);
+
+create table ReplyTweetPhotoDetails(ReplyTweetId int unique, PhotoData longblob, PhotoUrl varchar(500),  PhotoName varchar(50), PhotoType varchar(20), foreign key(ReplyTweetId) references ReplyTweets(ReplyTweetId) on delete cascade);
+
+
+
