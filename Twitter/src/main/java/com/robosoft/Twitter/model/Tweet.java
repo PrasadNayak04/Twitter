@@ -1,11 +1,9 @@
-package com.robosoft.Twitter.entity;
+package com.robosoft.Twitter.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Lob;
 import java.sql.Timestamp;
 
 @Data
@@ -13,13 +11,13 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class Tweet {
 
+    private int tweetId;
     private String username;
     private String name;
-    private byte[] icon;
+    private String userIconUrl;
     private String hashtag;
     private String description;
-    @Lob
-    private byte[] photo;
+    private String tweetPhotoUrl;
     private Timestamp tweetDate;
     private int likes;
 

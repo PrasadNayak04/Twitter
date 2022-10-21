@@ -1,4 +1,4 @@
-package com.robosoft.Twitter.entity;
+package com.robosoft.Twitter.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,12 +10,14 @@ import javax.persistence.Id;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class User {
+public class UserProfile {
 
-    @Id
     private String username;
     private String name;
-    private String password;
+    private String iconUrl;
+    private String bio;
+    private int followersCount;
+    private int followingCount;
+    private boolean verified;
 
 }

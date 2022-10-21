@@ -1,10 +1,8 @@
-package com.robosoft.Twitter.entity;
+package com.robosoft.Twitter.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Lob;
 
 @Data
 @NoArgsConstructor
@@ -17,7 +15,6 @@ public class Comment {
     private String name;
     private String hashtag;
     private String comments;
-    @Lob
     private byte[] photo;
     private int likes;
 

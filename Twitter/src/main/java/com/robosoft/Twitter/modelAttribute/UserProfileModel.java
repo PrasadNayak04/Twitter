@@ -1,20 +1,18 @@
-package com.robosoft.Twitter.entity;
+package com.robosoft.Twitter.modelAttribute;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Lob;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentLike {
+public class UserProfileModel {
 
-    private int commentId;
     private String username;
+    private MultipartFile icon;
     private String name;
-    @Lob
-    private byte[] icon;
+    private String bio;
 
 }

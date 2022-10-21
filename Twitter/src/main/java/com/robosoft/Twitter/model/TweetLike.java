@@ -1,4 +1,4 @@
-package com.robosoft.Twitter.entity;
+package com.robosoft.Twitter.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

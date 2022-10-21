@@ -3,16 +3,16 @@ package com.robosoft.Twitter.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
+
+import javax.persistence.Id;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserProfileModel {
+public class User {
 
     private String username;
     private String name;
-    private MultipartFile icon;
-    private String bio;
+    private String password;
 
 }
